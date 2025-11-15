@@ -10,7 +10,7 @@ class JokeTellerApp:
         master.geometry("600x400")
         master.config(bg='#E0F7FA')
 
-        # --- Set window icon ---
+        # Set window icon
         icon_path = os.path.join(os.path.dirname(__file__), 'joke.ico')
         if os.path.exists(icon_path):
             try:
@@ -30,16 +30,16 @@ class JokeTellerApp:
         self.setup_pulse_id = None
         self.punchline_pulse_id = None
 
-        # --- GUI Elements Setup ---
+        # GUI Elements Setup 
 
-        # 1. Setup Label
+        # Setup Label
         self.base_font_size = 16
         self.setup_label = tk.Label(master, text="Press 'Alexa tell me a Joke' to begin!",
                                     wraplength=550, font=('Roboto', self.base_font_size, 'italic'),
                                     bg='#E0F7FA', fg='#333333', pady=20)
         self.setup_label.pack()
 
-        # 2. Punchline Label (styled as a box)
+        #Punchline Label (styled as a box)
         self.punchline_label = tk.Label(
             master,
             text="",
@@ -53,7 +53,7 @@ class JokeTellerApp:
         )
         self.punchline_label.pack(pady=10)
 
-        # --- Button Frame ---
+        # Button Frame
         self.button_frame = tk.Frame(master, bg='#E0F7FA')
         self.button_frame.pack(pady=30)
 
@@ -62,7 +62,7 @@ class JokeTellerApp:
         button_pady = 8
         self.buttons = {}
 
-        # 3. Main Joke Button
+        # Main Joke Button
         self.joke_button = tk.Button(
             self.button_frame,
             text="Alexa tell me a Joke",
@@ -87,7 +87,7 @@ class JokeTellerApp:
         self.buttons[self.punchline_button] = {'bg': '#8BC34A', 'activebg': '#7CB342', 'padx': 15, 'pady': 8}
         self.bind_hover_events(self.punchline_button)
 
-        # 5. Next Joke Button
+        # Next Joke Button
         self.next_button = tk.Button(
             self.button_frame,
             text="Next Joke",
@@ -100,7 +100,7 @@ class JokeTellerApp:
         self.buttons[self.next_button] = {'bg': '#FFC107', 'activebg': '#FFB300', 'padx': 15, 'pady': 8}
         self.bind_hover_events(self.next_button)
 
-        # 6. Quit Button
+        # Quit Button
         self.quit_button = tk.Button(
             master,
             text="Quit",
@@ -112,13 +112,13 @@ class JokeTellerApp:
         self.buttons[self.quit_button] = {'bg': '#F44336', 'activebg': '#D32F2F', 'padx': 15, 'pady': 8}
         self.bind_hover_events(self.quit_button)
 
-    # --- Click Sound ---
+    # Click Sound
     def play_click_sound(self):
         sound_path = os.path.join(os.path.dirname(__file__), 'click.wav')
         if os.path.exists(sound_path):
             winsound.PlaySound(sound_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
-    # --- Hover Animations ---
+    # Hover Animations
     def bind_hover_events(self, widget):
         widget.bind("<Enter>", lambda event: self.on_hover(widget, True))
         widget.bind("<Leave>", lambda event: self.on_hover(widget, False))
@@ -130,7 +130,7 @@ class JokeTellerApp:
         else:
             widget.config(bg=config['bg'], padx=config['padx'], pady=config['pady'])
 
-    # --- Pulse Animations ---
+    # Pulse Animations
     def pulse_setup_label(self, step=0):
         if self.setup_pulse_id is None:
             return
@@ -167,7 +167,7 @@ class JokeTellerApp:
             self.punchline_label.config(font=('Roboto', 18, 'bold'))
             self.punchline_pulse_id = None
 
-    # --- Joke Logic ---
+    # Joke Logic
     def load_jokes(self):
         jokes = []
         try:
@@ -238,7 +238,7 @@ class JokeTellerApp:
             self.punchline_pulse_id = 1
             self.pulse_punchline_label()
 
-# --- Main execution ---
+# Main execution
 if __name__ == "__main__":
     resource_dir = os.path.join(os.path.dirname(__file__), 'resources')
     os.makedirs(resource_dir, exist_ok=True)

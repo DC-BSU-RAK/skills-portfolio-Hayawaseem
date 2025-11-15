@@ -262,8 +262,8 @@ Why was the math book sad?Because it had too many problems.
 What do you call cheese that isn't yours?Nacho cheese.
 Why can't you hear a Pterodactyl go to the bathroom?Because the 'P' is silent.
 Why did the bicycle fall over?Because it was two tired.
-What did the triangle say to the circle?You’re pointless.
-What did the husband pen say to the wife pen?You’re always write.
+What did the triangle say to the circle?You're pointless.
+What did the husband pen say to the wife pen?You're always write.
 Who makes money by driving their customers away?Uber drivers.
 """
     with open(dummy_file_path, 'w', encoding='utf-8') as f:

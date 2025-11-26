@@ -7,7 +7,7 @@ import pygame
 class StudentManager:
     def __init__(self, root):
         self.root = root
-        self.root.title("Student Manager Pro")
+        self.root.title("Student Manager")
         self.root.geometry("1000x700")
         self.root.configure(bg='#2c3e50')
         
@@ -246,7 +246,7 @@ class StudentManager:
         header_frame.pack_propagate(False)  # Don't let the frame shrink
         
         title_label = tk.Label(header_frame, 
-                              text="Student Manager Pro", 
+                              text="Student Manager", 
                               font=("Arial", 24, "bold"),
                               bg=self.colors['primary'],
                               fg=self.colors['text_light'])
@@ -826,4 +826,4 @@ def main():
     root.mainloop()
 
 if __name__ == "__main__":
-    main ()
+    main()

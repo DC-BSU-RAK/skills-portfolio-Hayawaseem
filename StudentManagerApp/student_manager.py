@@ -8,7 +8,7 @@ class StudentManager:
     def __init__(self, root):
         self.root = root
         self.root.title("Student Manager")
-        self.root.geometry("1000x700")
+        self.root.geometry("1200x800")  # Increased window size
         self.root.configure(bg='#2c3e50')
         
         # Initialize pygame mixer for sound - this will handle the click sounds
@@ -238,7 +238,7 @@ class StudentManager:
         """Create the enhanced GUI - the main user interface"""
         # Main frame with gradient background
         main_frame = tk.Frame(self.root, bg=self.colors['dark_bg'])
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
         
         # Header with banner - the top section of the app
         header_frame = tk.Frame(main_frame, bg=self.colors['primary'], height=120)
@@ -264,14 +264,14 @@ class StudentManager:
         content_frame.pack(fill=tk.BOTH, expand=True)
         
         # Left menu frame - contains all the action buttons
-        menu_frame = tk.Frame(content_frame, bg=self.colors['light_bg'], relief='ridge', bd=2, width=350)
-        menu_frame.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 10))
+        menu_frame = tk.Frame(content_frame, bg=self.colors['light_bg'], relief='ridge', bd=2, width=400, height=650)
+        menu_frame.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 15))
         menu_frame.pack_propagate(False)  # Prevent frame from shrinking
         
         # Menu title
         menu_title = tk.Label(menu_frame, 
                              text="Menu Options", 
-                             font=("Arial", 14, "bold"),
+                             font=("Arial", 16, "bold"),
                              bg=self.colors['light_bg'],
                              fg=self.colors['text_light'])
         menu_title.pack(pady=20)
@@ -291,10 +291,23 @@ class StudentManager:
         # Basic menu buttons section
         basic_label = tk.Label(menu_frame,
                              text="Core Features:",
-                             font=("Arial", 11, "bold"),
+                             font=("Arial", 12, "bold"),
                              bg=self.colors['light_bg'],
                              fg=self.colors['text_light'])
         basic_label.pack(pady=(10, 5))
+        
+        # Create a canvas and scrollbar for the menu to ensure all buttons are visible
+        menu_canvas = tk.Canvas(menu_frame, bg=self.colors['light_bg'], highlightthickness=0)
+        scrollbar = ttk.Scrollbar(menu_frame, orient=tk.VERTICAL, command=menu_canvas.yview)
+        scrollable_frame = tk.Frame(menu_canvas, bg=self.colors['light_bg'])
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
+        )
+        
+        menu_canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        menu_canvas.configure(yscrollcommand=scrollbar.set)
         
         # Define all the menu buttons and their functions
         buttons_data = [
@@ -310,9 +323,13 @@ class StudentManager:
         
         self.menu_buttons = []
         for i, (text, command) in enumerate(buttons_data):
-            btn_frame = self.create_glow_button(menu_frame, text, command, button_colors[i])
-            btn_frame.pack(fill=tk.X, padx=15, pady=8)
+            btn_frame = self.create_glow_button(scrollable_frame, text, command, button_colors[i])
+            btn_frame.pack(fill=tk.X, padx=20, pady=10)  # Increased padding
             self.menu_buttons.append(btn_frame)
+        
+        # Pack the canvas and scrollbar
+        menu_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         # Statistics frame - shows quick stats at the bottom of the menu
         stats_frame = tk.Frame(menu_frame, bg=self.colors['light_bg'])
@@ -320,14 +337,14 @@ class StudentManager:
         
         stats_label = tk.Label(stats_frame,
                              text="Quick Stats:",
-                             font=("Arial", 11, "bold"),
+                             font=("Arial", 12, "bold"),
                              bg=self.colors['light_bg'],
                              fg=self.colors['text_light'])
         stats_label.pack()
         
         self.stats_text = tk.Label(stats_frame,
                                  text=f"Students: {len(self.students)}",
-                                 font=("Arial", 10),
+                                 font=("Arial", 11),
                                  bg=self.colors['light_bg'],
                                  fg=self.colors['text_light'])
         self.stats_text.pack(pady=5)
@@ -338,7 +355,7 @@ class StudentManager:
         
         results_header = tk.Label(results_main_frame,
                                 text="Results Display",
-                                font=("Arial", 14, "bold"),
+                                font=("Arial", 16, "bold"),
                                 bg=self.colors['dark_bg'],
                                 fg=self.colors['text_light'])
         results_header.pack(pady=(0, 10))
@@ -355,8 +372,8 @@ class StudentManager:
                                    bg='#f8f9fa',  # Light background for readability
                                    fg=self.colors['text_dark'],
                                    relief='flat',
-                                   padx=10,
-                                   pady=10)
+                                   padx=15,  # Increased padding
+                                   pady=15)
         
         # Create scrollbar for the text widget
         scrollbar = ttk.Scrollbar(self.results_frame, orient=tk.VERTICAL, command=self.results_text.yview)
@@ -371,6 +388,19 @@ class StudentManager:
         self.results_text.tag_configure('warning', foreground='#e67e22')  # Orange for average grades
         self.results_text.tag_configure('error', foreground='#e74c3c')    # Red for poor grades
         self.results_text.tag_configure('highlight', background='#fff3cd')  # Yellow highlight
+        
+        # Display initial message
+        self.clear_results()
+        self.results_text.insert(tk.END, "Welcome to Student Manager!\n\n", 'header')
+        self.results_text.insert(tk.END, "Use the menu buttons on the left to:\n")
+        self.results_text.insert(tk.END, "• View all student records\n")
+        self.results_text.insert(tk.END, "• View individual students\n")
+        self.results_text.insert(tk.END, "• Find highest/lowest scores\n")
+        self.results_text.insert(tk.END, "• Sort student records\n")
+        self.results_text.insert(tk.END, "• Add new students\n")
+        self.results_text.insert(tk.END, "• Delete student records\n")
+        self.results_text.insert(tk.END, "• Update student information\n\n")
+        self.results_text.insert(tk.END, f"Currently loaded: {len(self.students)} students\n", 'success')
     
     def clear_results(self):
         """Clear the results text area - like clearing a whiteboard"""
